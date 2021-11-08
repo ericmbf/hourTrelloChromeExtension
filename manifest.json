@@ -1,0 +1,10 @@
+{
+    "name": "Trello Add Hour to Card",
+    "version": "1.0",
+    "description": "My Extension Experiment",
+    "manifest_version": 3,
+    "content_scripts": [{
+        "matches": ["https://trello.com/*"],
+        "js": ["scripts.js"]
+      }]
+  }
