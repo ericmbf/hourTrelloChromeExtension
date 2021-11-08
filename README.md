@@ -14,14 +14,14 @@ https://trello.com/app-key
 
 
 4. Load the extension offline into your chrome.
-4.1. Open the google chrome extension option and click on "Load unpacked" option.
-![alt text](img/extensionOption.png)
+    4.1 Open the google chrome extension option and click on "Load unpacked" option.
+    ![alt text](img/extensionOption.png)
 
-4.2 Search and select the repository root directory.
-![alt text](img/directory.png)
+    4.2 Search and select the repository root directory.
+    ![alt text](img/directory.png)
 
-4.3 The module will be load and is ready to get used.
-![alt text](img/extensionLoaded.png)
+    4.3 The module will be load and is ready to get used.
+    ![alt text](img/extensionLoaded.png)
 
 5. Now you can enter in your Trello boards and see the date and hour from deadlines cards. 
 
