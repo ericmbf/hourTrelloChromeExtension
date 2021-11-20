@@ -18,51 +18,58 @@ function timeout() {
 }
 
 function putHourIntoCard() {
-    var els = document.getElementsByClassName("custom-field-front-badges js-custom-field-badges");
-    var interval = 80; // how much time should the delay between two iterations be (in milliseconds)?
+    var els = document.getElementsByClassName("list-header-name-assist js-list-name-assist");
+    var interval = 200; // how much time should the delay between two iterations be (in milliseconds)?
     var promise = Promise.resolve();
     Array.prototype.forEach.call(els, function (el) {
         promise = promise.then(function () {
 
             // Do stuff here
-            var shouldCheck = false
-            var brothers = siblings(el)
-            brothers.forEach(element => {
-                if (element.classList.contains('js-badges')) 
-                {
-                    if(findChildByClass(element, 'js-due-date-badge'))
-                    {
-                        shouldCheck = true;
-                    }
-                }
-            });
-
-            if (shouldCheck) {
-                var aTag = findUpTag(el, "A");
-
-                if (aTag !== null) {
-                    idCard = aTag.href.split("/")[4];
-
-                    getJSON('https://api.trello.com/1/cards/' + idCard + '/due?key=' + key + '&token=' + token,
-                        function (err, data) {
-                            if (err !== null) {
-                                console.log(data)
-                            } else {
-                                if (data._value !== null) {
-                                    var date = new Date(data._value);
-                                    hour = ('0' + date.getHours()).slice(-2);
-                                    mins = ('0' + date.getMinutes()).slice(-2);
-                                    hour = hour + ":" + mins
-                                    el.innerHTML = hour
-                                }
-                            }
-                        });
-                }
+            spans = []
+            if ((el.innerHTML == 'Today') || (el.innerHTML == 'Tomorrow')) {
+                var parentDiv = findAncestor(el, 'js-list-content');
+                var spans = parentDiv.getElementsByClassName('custom-field-front-badges js-custom-field-badges');
             }
 
-            return new Promise(function (resolve) {
-                setTimeout(resolve, interval);
-            });
+            for (i = 0; i < spans.length; i++) {
+
+                var shouldCheck = false;
+                var brothers = siblings(spans[i])
+                brothers.forEach(element => {
+                    if (element.classList.contains('js-badges')) {
+                        if (findChildByClass(element, 'js-due-date-badge')) {
+                            shouldCheck = true;
+                        }
+                    }
+                });
+
+                if (shouldCheck) {
+                    var aTag = findUpTag(spans[i], "A");
+
+                    if (aTag !== null) {
+                        idCard = aTag.href.split("/")[4];
+
+                        getJSON('https://api.trello.com/1/cards/' + idCard + '/due?key=' + key + '&token=' + token,
+                            function (err, data) {
+                                if (err !== null) {
+                                    console.log(data)
+                                } else {
+                                    if (data._value !== null) {
+                                        var date = new Date(data._value);
+                                        hour = ('0' + date.getHours()).slice(-2);
+                                        mins = ('0' + date.getMinutes()).slice(-2);
+                                        hour = hour + ":" + mins
+                                        spans[i].innerHTML = hour
+                                    }
+                                }
+                            });
+                    }
+                }
+            }
+        });
+
+        return new Promise(function (resolve) {
+            setTimeout(resolve, interval);
         });
     });
 
@@ -105,6 +112,11 @@ function findChildByClass(el, className) {
     return null;
 }
 
+function findAncestor (el, cls) {
+    while ((el = el.parentElement) && !el.classList.contains(cls));
+    return el;
+}
+
 function waitForElement(elementId, callBack) {
     window.setTimeout(function () {
         var element = document.getElementById(elementId);
@@ -116,4 +128,5 @@ function waitForElement(elementId, callBack) {
     }, 3000)
 }
 
-var siblings = n => [...n.parentElement.children].filter(c=>c!=n)
+var siblings = n => [...n.parentElement.children].filter(c => c != n)
+
