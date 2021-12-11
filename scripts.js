@@ -74,7 +74,7 @@ function putHourIntoCards(LISTNAMES) {
                     if (aTag !== null) {
                         idCard = aTag.href.split("/")[4];
 
-                        getJSON('https://api.trello.com/1/cards/' + idCard + '/due?key=' + KEY + '&token=' + token,
+                        getJSON('https://api.trello.com/1/cards/' + idCard + '/due?key=' + KEY + '&token=' + TOKEN,
                             function (err, data, element) {
                                 if (err !== null) {
                                     console.log(data)
