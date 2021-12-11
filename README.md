@@ -1,33 +1,56 @@
 # Add Hour to Your Card Trello by Chrome Extension
+
 This repository creates a offline chrome extension to put hour into trello card.
+
 ![alt text](img/hour.png)
 
-# Steps
-1. The first step is to create a API Key to get access to your trello cards from API. 
-Using the link below you can create the API Key.
-https://trello.com/app-key
+## Installation
 
-2. In the same page, you need create a token that also will be used in the requests to API Trello.
+##### 1. Create API Key
 
-3. After get the two keys, replaces into the first two lines in the scripts.js file from repository.
+The first step is to create a API Key to get access to your trello cards from API. 
+Using the link [Trello API](https://trello.com/app-key) you can create the API Key.
+
+
+##### 2. Create and get token
+
+ In the same page, you need create a token that also will be used in the requests to API Trello.
+
+##### 3. Replace Key and Token in the script file
+
+After get the two keys, replaces into the first two lines in the scripts.js file from repository.
+
 ![alt text](img/keys.png)
 
-4. Above keys, your should select the lists that you want that put the hour on cards. You can put more than one list put the names between '|'. For example, "Today|Tomorrow" will put the hour in all cards inside these lists.
+##### 4. Select the Lists to put card hour
+
+Below the key and token, you should select the lists that you want put the hour on cards. You can put more than one list put the names between '|'. For example, "Today|Tomorrow" will put the hour in all cards inside these lists.
+
 ![alt text](img/listName.png)
 
-4. Load the extension offline into your chrome.
+##### 5. Put the extension to work on Chrome
 
-4.1 Open the google chrome extension option and click on "Load unpacked" option.
+###### 5.1. Open Google Chrome Extension
+
+Open the google chrome extension option and click on "Load unpacked" option.
+
 ![alt text](img/extensionOption.png)
 
-4.2 Search and select the repository root directory.
+###### 5.2. Select the extension directory
+
+Search and select the repository root directory.
+
 ![alt text](img/directory.png)
 
-4.3 The module will be load and is ready to get used.
+###### 5.3. See the extension working
+
+The module will be load and is ready to get used.
 
 ![alt text](img/extensionLoaded.png)
 
-5. Now you can enter in your Trello boards and see the date and hour from deadlines cards. 
+##### 6. Open your trello board
+
+Now you can enter in your Trello boards and see the date and hour from deadlines cards. 
 
 ## License
 
