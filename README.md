@@ -12,6 +12,8 @@ https://trello.com/app-key
 3. After get the two keys, replaces into the first two lines in the scripts.js file from repository.
 ![alt text](img/keys.png)
 
+4. Above keys, your should select the lists that you want that put the hour on cards. You can put more than one list put the names between '|'. For example, "Today|Tomorrow" will put the hour in all cards inside these lists.
+![alt text](img/listName.png)
 
 4. Load the extension offline into your chrome.
 

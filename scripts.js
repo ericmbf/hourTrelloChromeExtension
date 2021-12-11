@@ -1,38 +1,63 @@
-key = 'put your key here'
-token = 'put your token here'
+KEY = 'put_your_key_here'
+TOKEN = 'put_your_token_here'
+LISTNAMES = "Today|Tomorrow"
 
 window.addEventListener('load', function () {
     window.setTimeout(function () {
-        waitForElement('board', timeout);
+        waitForElement('board', initScript);
     }, 1000);
 })
 
-function timeout() {
-    setTimeout(function () {
-        // Do Something Here
-        putHourIntoCard();
-        // Then recall the parent function to
-        // create a recursive loop.
-        timeout();
-    }, 1000);
+function initScript() {
+
+    putHourIntoCards(LISTNAMES);
+    putObservableInto();
 }
 
-function putHourIntoCard() {
+function putObservableInto() {
+    let observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            let oldValue = mutation.oldValue;
+            let newValue = mutation.target.textContent;
+            if (oldValue !== newValue) {
+                if (newValue.includes("alterou") || newValue.includes("changed")) {
+                    // do something
+                    putHourIntoCards(LISTNAMES);
+                }
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        characterDataOldValue: true,
+        subtree: true,
+        childList: true,
+        characterData: true
+    });
+}
+
+function checkValidCard(dat, arr) { //"not" function
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == dat) { return true; }
+    }
+    return false;
+}
+
+function putHourIntoCards(LISTNAMES) {
     var els = document.getElementsByClassName("list-header-name-assist js-list-name-assist");
-    var interval = 200; // how much time should the delay between two iterations be (in milliseconds)?
+    var interval = 80; // how much time should the delay between two iterations be (in milliseconds)?
     var promise = Promise.resolve();
     Array.prototype.forEach.call(els, function (el) {
         promise = promise.then(function () {
 
             // Do stuff here
             spans = []
-            if ((el.innerHTML == 'Today') || (el.innerHTML == 'Tomorrow')) {
+            if (checkValidCard(el.innerHTML, LISTNAMES.split("|"))){
                 var parentDiv = findAncestor(el, 'js-list-content');
                 var spans = parentDiv.getElementsByClassName('custom-field-front-badges js-custom-field-badges');
             }
 
             for (i = 0; i < spans.length; i++) {
-
                 var shouldCheck = false;
                 var brothers = siblings(spans[i])
                 brothers.forEach(element => {
@@ -49,8 +74,8 @@ function putHourIntoCard() {
                     if (aTag !== null) {
                         idCard = aTag.href.split("/")[4];
 
-                        getJSON('https://api.trello.com/1/cards/' + idCard + '/due?key=' + key + '&token=' + token,
-                            function (err, data) {
+                        getJSON('https://api.trello.com/1/cards/' + idCard + '/due?key=' + KEY + '&token=' + token,
+                            function (err, data, element) {
                                 if (err !== null) {
                                     console.log(data)
                                 } else {
@@ -59,17 +84,17 @@ function putHourIntoCard() {
                                         hour = ('0' + date.getHours()).slice(-2);
                                         mins = ('0' + date.getMinutes()).slice(-2);
                                         hour = hour + ":" + mins
-                                        spans[i].innerHTML = hour
+                                        element.innerHTML = hour
                                     }
                                 }
-                            });
+                            }, spans[i]);
                     }
                 }
             }
-        });
 
-        return new Promise(function (resolve) {
-            setTimeout(resolve, interval);
+            return new Promise(function (resolve) {
+                setTimeout(resolve, interval);
+            });
         });
     });
 
@@ -78,14 +103,14 @@ function putHourIntoCard() {
     });
 }
 
-var getJSON = function (url, callback) {
+var getJSON = function (url, callback, element) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.responseType = 'json';
     xhr.onload = function () {
         var status = xhr.status;
         if (status === 200) {
-            callback(null, xhr.response);
+            callback(null, xhr.response, element);
         } else {
             callback(status, xhr.response);
         }
@@ -112,7 +137,7 @@ function findChildByClass(el, className) {
     return null;
 }
 
-function findAncestor (el, cls) {
+function findAncestor(el, cls) {
     while ((el = el.parentElement) && !el.classList.contains(cls));
     return el;
 }
@@ -129,4 +154,3 @@ function waitForElement(elementId, callBack) {
 }
 
 var siblings = n => [...n.parentElement.children].filter(c => c != n)
-
